@@ -51,5 +51,17 @@ The covering index allowed SQL Server to satisfy the query directly from the ind
 
 This demonstrated how a covering index can reduce additional lookups and improve query performance.
 
+### Composite Indexes
+
+I investigated composite indexes and the effect of key column order on index usage.
+
+I tested composite indexes with `(CustomerID, OrderDate)` and `(OrderDate, CustomerID)`.
+
+The first column is the leading key of the index, so changing the column order creates a different index structure and can affect how SQL Server uses the index.
+
+I compared queries using both columns, only the leading column, and only the second column through execution plans.
+
+This demonstrated why column order must be considered when designing composite indexes.
+
 
 
