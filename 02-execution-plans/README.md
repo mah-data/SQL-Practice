@@ -38,3 +38,18 @@ This demonstrated how statistics can affect cardinality estimation.
 A stored procedure was created to investigate parameter sniffing and plan reuse.
 
 The investigation is in progress.
+
+### Indexing and Covering Indexes
+
+I investigated how indexes affect query execution plans.
+
+For a query filtering by `CustomerID`, an index on `CustomerID` allowed SQL Server to use an Index Seek.
+
+I then tested a covering index that included the columns required by the query.
+
+The covering index allowed SQL Server to satisfy the query directly from the index and avoid an additional Key Lookup.
+
+This demonstrated how a covering index can reduce additional lookups and improve query performance.
+
+
+
