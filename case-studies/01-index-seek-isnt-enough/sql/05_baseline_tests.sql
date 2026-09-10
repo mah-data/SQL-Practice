@@ -1,0 +1,21 @@
+USE JoinOptimizationLab;
+GO
+
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+
+PRINT 'CustomerID = 10';
+
+SELECT *
+FROM dbo.Orders
+WHERE CustomerID = 10;
+
+PRINT 'CustomerID = 1';
+
+SELECT *
+FROM dbo.Orders
+WHERE CustomerID = 1;
+
+SET STATISTICS IO OFF;
+SET STATISTICS TIME OFF;
+GO
