@@ -1,0 +1,85 @@
+Case Study #03
+Tracing SQL Server Plan Cache Behavior:
+Compilation, Reuse, Eviction, and Performance Evidence
+
+Evidence: Intervening Ad hoc Activity
+======================================
+
+Test 3 — Intervening Ad hoc Activity
+
+
+Target Query
+------------
+
+SELECT *
+FROM dbo.Orders
+WHERE CustomerID = 1;
+
+
+Experimental Conditions
+-----------------------
+
+The Plan Cache was cleared before the test:
+
+DBCC FREEPROCCACHE;
+
+The target statement was executed once.
+
+Three additional Ad hoc statements were then executed:
+
+SELECT *
+FROM dbo.Customers
+WHERE CustomerID = 1;
+
+SELECT *
+FROM dbo.Customers
+WHERE CustomerID = 2;
+
+SELECT *
+FROM dbo.Customers
+WHERE CustomerID = 3;
+
+The Plan Cache was then inspected for the target statement.
+
+
+Observed Result
+---------------
+
+usecounts       = 1
+objtype         = Adhoc
+cacheobjtype    = Compiled Plan
+size_in_bytes   = 16384
+
+
+Interpretation
+--------------
+
+The target plan remained observable in Plan Cache after the
+three intervening Ad hoc statements.
+
+No eviction of the target plan was observed during this test.
+
+This result demonstrates that the presence of intervening
+Ad hoc activity does not by itself guarantee immediate
+eviction of the target plan.
+
+The result is specific to the conditions of this test
+environment.
+
+
+Key Evidence
+------------
+
+usecounts       = 1
+objtype         = Adhoc
+cacheobjtype    = Compiled Plan
+size_in_bytes   = 16384
+
+
+Conclusion
+----------
+
+The target plan remained in Plan Cache after the controlled
+intervening activity.
+
+Therefore, eviction was not observed in this experiment.

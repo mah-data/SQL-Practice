@@ -1,0 +1,68 @@
+Case Study #03
+Tracing SQL Server Plan Cache Behavior:
+Compilation, Reuse, Eviction, and Performance Evidence
+
+Evidence: Plan Reuse
+=====================
+
+Target Query
+------------
+
+SELECT *
+FROM dbo.Orders
+WHERE CustomerID = 1;
+
+
+Experimental Conditions
+-----------------------
+
+Plan Cache was cleared before the test:
+
+DBCC FREEPROCCACHE;
+
+The target statement was executed three consecutive times.
+
+The execution statistics and Plan Cache metadata were then
+inspected.
+
+
+Observed Result
+---------------
+
+Execution Statistics:
+
+execution_count      = 3
+total_worker_time    = 22840 microseconds
+total_elapsed_time   = 701683 microseconds
+total_logical_reads  = 21
+total_logical_writes = 0
+
+
+Plan Cache Metadata:
+
+usecounts            = 3
+objtype              = Adhoc
+cacheobjtype         = Compiled Plan
+size_in_bytes        = 16384
+
+
+Interpretation
+--------------
+
+The target statement was executed three times and the
+corresponding cached plan showed usecounts = 3.
+
+The execution statistics also showed execution_count = 3.
+
+The observed evidence is consistent with reuse of the cached
+plan across the three consecutive executions.
+
+
+Key Evidence
+------------
+
+execution_count = 3
+usecounts       = 3
+
+This provides direct evidence of repeated execution and
+cached-plan reuse under the conditions of this test.

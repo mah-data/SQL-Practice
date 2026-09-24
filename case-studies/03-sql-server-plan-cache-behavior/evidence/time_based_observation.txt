@@ -1,0 +1,75 @@
+/*
+Case Study #03
+Tracing SQL Server Plan Cache Behavior:
+Compilation, Reuse, Eviction, and Performance Evidence
+
+Evidence: Time-Based Plan Cache Observation
+*/
+
+
+Test 4 — Time-Based Plan Cache Observation
+===========================================
+
+Target Query
+------------
+
+SELECT *
+FROM dbo.Orders
+WHERE CustomerID = 1;
+
+
+Experimental Conditions
+-----------------------
+
+The Plan Cache was cleared before each time-based observation
+using:
+
+DBCC FREEPROCCACHE;
+
+The target query was executed once.
+
+The Plan Cache was then inspected after the specified
+idle interval.
+
+
+Observed Results
+----------------
+
+10 seconds
+Plan remained observable in sys.dm_exec_cached_plans.
+
+20 seconds
+Plan remained observable in sys.dm_exec_cached_plans.
+
+30 seconds
+Plan remained observable in sys.dm_exec_cached_plans.
+
+40 seconds
+Plan was no longer observable in sys.dm_exec_cached_plans.
+
+50 seconds
+Plan was no longer observable in sys.dm_exec_cached_plans.
+
+
+Observed Pattern
+----------------
+
+The target plan remained observable during the shorter
+idle intervals tested.
+
+The plan was no longer observable after the 40-second
+and 50-second observations.
+
+
+Important Interpretation
+-----------------------
+
+These observations do not establish a fixed Plan Cache
+timeout.
+
+They only document the behavior observed under the
+conditions of this test environment.
+
+Plan disappearance from sys.dm_exec_cached_plans is treated
+as an observation of cache state, not as proof of a specific
+eviction mechanism.

@@ -1,0 +1,71 @@
+Case Study #03
+Tracing SQL Server Plan Cache Behavior:
+Compilation, Reuse, Eviction, and Performance Evidence
+
+Evidence: Initial Compilation and Plan Cache Entry
+====================================================
+
+Target Query
+------------
+
+SELECT *
+FROM dbo.Orders
+WHERE CustomerID = 1;
+
+
+Experimental Conditions
+-----------------------
+
+The Plan Cache was cleared before execution:
+
+DBCC FREEPROCCACHE;
+
+The target statement was executed once.
+
+Execution statistics and Plan Cache metadata were then
+inspected.
+
+
+Observed Result
+---------------
+
+Execution Statistics:
+
+execution_count      = 1
+total_worker_time    = 2734 microseconds
+total_elapsed_time   = 237822 microseconds
+total_logical_reads  = 7
+total_logical_writes = 0
+
+
+Plan Cache Metadata:
+
+usecounts            = 1
+objtype              = Adhoc
+cacheobjtype         = Compiled Plan
+size_in_bytes        = 16384
+
+
+Interpretation
+--------------
+
+After the initial execution, the target statement was
+observable in both execution statistics and Plan Cache
+metadata.
+
+The cached entry was an Adhoc Compiled Plan with a size of
+16384 bytes.
+
+The execution statistics showed one execution and the Plan
+Cache entry showed usecounts = 1.
+
+
+Key Evidence
+------------
+
+execution_count = 1
+usecounts       = 1
+objtype         = Adhoc
+cacheobjtype    = Compiled Plan
+size_in_bytes   = 16384
+logical_reads   = 7
